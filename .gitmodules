@@ -1,0 +1,7 @@
+[submodule "playerApi"]
+	path = playerApi
+	url = https://github.com/saadRafik/playerApi.git
+
+[submodule "authentificationApi"]
+	path = authentificationApi
+	url = https://github.com/saadRafik/authentificationApi.git
