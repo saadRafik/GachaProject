@@ -1,0 +1,49 @@
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+    expose:
+      - 27017
+    ports:
+      - '27017:27017'
+    restart: on-failure
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "127.0.0.1/admin",
+          "--eval",
+          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  auth-api:
+    build: ./authentification-api
+    container_name: auth-api
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mongo
+
+  player-api:
+    build: ./player-api
+    container_name: player-api
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo:
