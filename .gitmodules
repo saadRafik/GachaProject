@@ -6,10 +6,6 @@
 	path = playerApi
 	url = https://github.com/saadRafik/playerApi.git
 
-[submodule "authentificationApi"]
-	path = monsterApi
-	url = https://github.com/saadRafik/monsterApi.git
-
 [submodule "monster-api/monsterApi"]
 	path = monster-api/monsterApi
 	url = https://github.com/saadRafik/monsterApi.git
