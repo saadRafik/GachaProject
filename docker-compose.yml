@@ -45,5 +45,13 @@ services:
     depends_on:
       - mongo
 
+  monster-api:
+    build: ./monster-api
+    container_name: monster-api
+    ports:
+      - "8083:8080"
+    depends_on:
+      - mongo
+
 volumes:
   mongo:
