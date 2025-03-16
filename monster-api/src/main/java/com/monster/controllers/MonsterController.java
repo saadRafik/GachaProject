@@ -2,29 +2,30 @@ package com.monster.controllers;
 
 import com.monster.models.Monster;
 import com.monster.services.MonsterService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/monsters")
 public class MonsterController {
-
     private final MonsterService monsterService;
 
     public MonsterController(MonsterService monsterService) {
         this.monsterService = monsterService;
     }
 
-    // Create a new monster (for player acquisition)
-    @PostMapping
-    public Monster createMonster(@RequestBody Monster monster) {
-        return monsterService.createMonster(monster);
-    }
-
-    // Retrieve a monster by its ID
     @GetMapping("/{id}")
-    public Monster getMonster(@PathVariable String id) {
-        return monsterService.getMonster(id);
+    public ResponseEntity<Monster> getMonster(@PathVariable Long id) {
+        return monsterService.getMonsterById(id);
     }
 
-    // (Optional) Additional endpoints for XP gain, skill upgrade, etc.
+    @PostMapping("/{id}/gain-exp/{amount}")
+    public ResponseEntity<Monster> gainExperience(@PathVariable Long id, @PathVariable int amount) {
+        return monsterService.gainExperience(id, amount);
+    }
+
+    @PostMapping("/{id}/upgrade-skill/{skillId}")
+    public ResponseEntity<String> upgradeSkill(@PathVariable Long id, @PathVariable Long skillId) {
+        return monsterService.upgradeSkill(id, skillId);
+    }
 }

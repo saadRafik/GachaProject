@@ -1,38 +1,42 @@
 package com.player.controllers;
 
-import com.player.dto.PlayerInfoResponse;
+import com.player.models.Player;
 import com.player.services.PlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.constraints.Min;
 
 @RestController
-@RequestMapping("/player")
+@RequestMapping("/players")
 public class PlayerController {
+    private final PlayerService playerService;
 
-    @Autowired
-    private PlayerService playerService;
-
-    // Get full player profile (including monsters)
-    @GetMapping("/{id}/profile")
-    public PlayerInfoResponse getProfile(@PathVariable String id) {
-        return playerService.getProfile(id);
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
-    // Gain experience; xp is passed as a query parameter
-    @PostMapping("/{id}/gain-xp")
-    public PlayerInfoResponse gainXP(@PathVariable String id, @RequestParam int xp) {
-        return playerService.gainExperience(id, xp);
+    @GetMapping("/{id}")
+    public ResponseEntity<Player> getPlayer(@PathVariable @Min(1) Long id) {
+        return playerService.getPlayerById(id);
     }
 
-    // Acquire a new monster; the request body should contain monster's base attributes
-    @PostMapping("/{id}/acquire-monster")
-    public PlayerInfoResponse acquireMonster(@PathVariable String id, @RequestBody Object monsterRequest) {
-        return playerService.acquireMonster(id, monsterRequest);
+    @PostMapping("/{id}/gain-exp/{amount}")
+    public ResponseEntity<Player> gainExperience(@PathVariable @Min(1) Long id, @PathVariable @Min(0) int amount) {
+        return playerService.gainExperience(id, amount);
     }
 
-    // Delete a monster from player's list by monster ID
-    @DeleteMapping("/{id}/monsters/{monsterId}")
-    public PlayerInfoResponse deleteMonster(@PathVariable String id, @PathVariable String monsterId) {
-        return playerService.deleteMonster(id, monsterId);
+    @PostMapping("/{id}/level-up")
+    public ResponseEntity<Player> levelUp(@PathVariable @Min(1) Long id) {
+        return playerService.levelUp(id);
+    }
+
+    @PostMapping("/{id}/monsters/add/{monsterId}")
+    public ResponseEntity<String> addMonster(@PathVariable @Min(1) Long id, @PathVariable @Min(1) Long monsterId) {
+        return playerService.addMonster(id, monsterId);
+    }
+
+    @DeleteMapping("/{id}/monsters/remove/{monsterId}")
+    public ResponseEntity<String> removeMonster(@PathVariable @Min(1) Long id, @PathVariable @Min(1) Long monsterId) {
+        return playerService.removeMonster(id, monsterId);
     }
 }
