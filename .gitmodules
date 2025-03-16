@@ -9,3 +9,7 @@
 [submodule "monsterApi"]
 	path = monsterApi
 	url = https://github.com/saadRafik/monsterApi.git
+
+[submodule "invocationsApi"]
+	path = invocationsApi
+	url = https://github.com/saadRafik/invocationsApi.githttps://github.com/saadRafik/invocationsApi.git
